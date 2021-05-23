@@ -24,6 +24,7 @@
     <ProjectGuid>{b599b075-59a0-4d77-9351-f4ee9bdd2ddc}</ProjectGuid>
     <RootNamespace>LearningOOP</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>OOP</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

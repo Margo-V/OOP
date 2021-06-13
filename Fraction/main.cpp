@@ -1,5 +1,12 @@
 #include <iostream>
+#include <string.h>
+using std::cout;
+using std::cin;
+using std::endl;
 
+
+
+#define DELIMETR "-------------------------"
 #define tab "\t"
 
 using namespace std;
@@ -49,7 +56,7 @@ public:
 		this->denominator = 0;
 		cout << "DefaultConstructor:\t" << tab << this << endl;
 	}
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
@@ -125,8 +132,18 @@ public:
 		return old;
 	}
 
-	//---------------METHODS---------------
+	//---------------TYPE-CAST operators:---------------
+	explicit operator int()const
+	{
+		return integer;
+	}
 
+	operator double()const
+	{
+		return integer + (double)numerator / denominator;
+	}
+
+	//---------------METHODS---------------
 
 	Fraction& to_improper()
 	{
@@ -159,6 +176,8 @@ public:
 		cout << endl;
 	}
 
+	//friend istream& operator>> (istream& is, Fraction& obj);
+	//Ёта функци€ имеет set-методы, поэтому данна€ строка не имеет смысла
 };
 
 Fraction operator*(Fraction left, Fraction right)
@@ -222,10 +241,48 @@ ostream& operator<<(ostream& os, const Fraction& obj)
 	return os;
 }
 
+istream& operator>> (istream& is, Fraction& obj)
+{
+	
+	int integer, numerator, denominator;
+	integer = numerator = denominator = 0;
+	/*char str[256];
+	char* number[5]{};
+	is.getline(str, 256);
+	const char* delimiters = "(/)";
+	int i = 0;
+	for (char* pch = strtok(str, delimiters); pch; pch = strtok(NULL, delimiters), i++)
+	//for (number[i] = strtok(str, delimiters); number[i]; number[i++] = strtok(NULL, delimiters), i++)
+	{
+		//cout << pch << tab;
+		number[i] = pch;
+	}
+	//for (int i = 0; i < 5; i++)cout << number[i] << tab; cout << endl;
+	switch (i)
+	{
+	case 1: integer = atoi(number[0]); break;
+	case 2: 
+		numerator = atoi(number[0]), 
+		denominator = atoi(number[1]); break;
+	case 3:
+		integer = atoi(number[0]);
+		numerator = atoi(number[1]);
+		denominator = atoi(number[2]);
+	}*/
+	//is >> integer >> numerator >> denominator;
+	obj.set_integer(integer);
+	obj.set_numerator(numerator);
+	obj.set_denominator(denominator);
+	return is;
+}
+
 
 //#define CONSTRUCTORS_CHECK
 //#define ARITHMITICAL_OPERATORS_CHECK
 //#define INCREMENT_CHECK
+//#define COMPARISON_OPERATORS_CHECK
+//#define OUT_IN
+//#define OTHER_2_THIS_CONVERSIONS
 
 void main()
 {
@@ -273,8 +330,39 @@ void main()
 	}
 #endif // INCREMENT_CHECK
 
+#ifdef COMPARISON_OPERATORS_CHECK
 	Fraction A(1, 2);
 	Fraction B(5, 11);
 	cout << (A == B) << endl;
 	cout << (A != B) << endl;
+#endif // COMPARISON_OPERATORS_CHECK
+
+#ifdef OUT_IN
+	Fraction A;
+	cout << "¬ведите целую часть, числитель и знаменатель через зап€тую" << endl;
+	cin >> A;
+	cout << A << endl;
+#endif // OUT_IN
+
+#ifdef OTHER_2_THIS_CONVERSIONS
+	int a = 2;
+	//Fraction A = a;
+	Fraction A(a); //explicit constructor можно вызвать только так,
+					//его невозможно вызвать оператором =, так как обычный конструктор с одним параметром
+	cout << A << endl;
+	cout << "\n=============================\n" << endl;
+	Fraction B; //default construction
+	cout << DELIMETR << endl;
+	B = (Fraction)5;
+	cout << DELIMETR << endl;
+	cout << B << endl;
+	cout << "\n=============================\n" << endl;
+#endif // OTHER_2_THIS_CONVERSIONS
+
+	Fraction A(2, 3, 4);
+	cout << A << endl;
+	int a = (int)A;
+	cout << "a = " << a << endl;
+	double b = A;
+	cout << "b = " << b << endl;
 }

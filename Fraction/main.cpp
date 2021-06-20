@@ -63,6 +63,14 @@ public:
 		this->denominator = 1;
 		cout << "SingleArgumentConstructor:" <<tab << this << endl;
 	}
+	Fraction(double decimal)
+	{
+		integer = decimal;
+		decimal -= integer;
+		denominator = 1e+9;
+		numerator = decimal * denominator;
+		reduce();
+	}
 	Fraction(int numerator, int denominator)
 	{
 		this->integer = 0;
@@ -164,6 +172,38 @@ public:
 		to_improper();
 		Fraction inverted(denominator, numerator);
 		return inverted;
+	}
+
+	Fraction& reduce()
+	{
+		if (numerator == 0)
+		{
+			denominator = 1;
+			return *this;
+		}
+		int more;
+		int less;
+		int rest; // - остаток от деления
+		if (numerator > denominator)
+		{
+			more = numerator;
+			less = denominator;
+		}
+		else
+		{
+			less = numerator;
+			more = denominator;
+		}
+		do
+		{
+			rest = more % less;
+			more = less;
+			less = rest;
+		} while (rest);
+		int GCD = more; //GCD - Greatest Common Divider
+		numerator /= GCD;
+		denominator /= GCD;
+		return *this;
 	}
 
 	void print()
@@ -365,4 +405,12 @@ void main()
 	cout << "a = " << a << endl;
 	double b = A;
 	cout << "b = " << b << endl;
+	//Fraction C = 2.5;
+	//cout << C << endl;
+	cout << INT_MAX << endl;
+	cout << UINT_MAX << endl;
+	cout << DELIMETR << endl;
+	Fraction B = 3;
+	cout << B << endl;
+
 }

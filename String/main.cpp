@@ -27,34 +27,27 @@ public:
 		return str;
 	}
 	//				Constructors
-	explicit String(unsigned int size = 80)
+	explicit String(unsigned int size = 80):size(size), str(new char[size]{})
 	{
-		this->size = size;
-		this->str = new char[size] {};
 		cout << "Size_DefConstructor:\t" << this << endl;
 	}
 
-	String(const char str[])
-	{
-		this->size = strlen(str) + 1;
-		this->str = new char[size] {};
-		for (int i = 0; str[i]; i++)
-		{
-			this->str[i] = str[i];
-		}
+	String(const char str[]):String(strlen(str) +1)
+	{	
+		for (int i = 0; str[i]; i++)this->str[i] = str[i];
 		cout << "Constructor:\t" << this << endl;
 	}
 
-	String(const String& other)
+	String(const String& other):String(other.str)
 	{
-		this->size = other.size;
+		//this->size = other.size;
 		//this->str = other.str; - Shallow copy(поверхностное) //Нельзя так делать с указателями!
-		this->str = new char[size] {};
-		for (int i = 0; i < size; i++)
-		{
-			this->str[i] = other.str[i];	//Побитовое(побайтовое) копирование
-											//Deep copy
-		}
+		//this->str = new char[size] {};
+		//for (int i = 0; i < size; i++)
+		//{
+		//	this->str[i] = other.str[i];	//Побитовое(побайтовое) копирование
+		//									//Deep copy
+		//}
 		cout << "CopyConstructor:" << this << endl;
 	}
 	String( String&& other)
@@ -157,7 +150,7 @@ std::ostream& operator<<(std::ostream& os, const String& obj)
 
 //#define CONSTRUCTORSCHECK
 //#define INPUT_CHECK
-//#define OPERATOR_PLUS_CHECK
+#define OPERATOR_PLUS_CHECK
 //#define HOW_CAN_WE_CALL_CONSTRUCTORS
 
 void main()
@@ -187,15 +180,17 @@ void main()
 	String str1 = "Hello";
 	String str2 = "World";
 	cout << delimeter << endl;
-	String str3;		//Default Constructor
-	str3 = str1 + str2;	//Move Assignment
+	//String str3;		//Default Constructor
+	//str3 = str1 + str2;	//Move Assignment
 	//MoveMethods:MoveConstructor, MoveAssignement
-	cout << delimeter << endl;
-	cout << str3 << endl;
-
-
+	//cout << str3 << endl;
 	str1 += str2;
 	cout << str1 << endl;
+	cout << delimeter << endl;
+	String str3 = str1;
+	cout << delimeter << endl;
+
+	cout << str3 << endl;
 #endif // OPERATOR_PLUS_CHECK
 
 #ifdef HOW_CAN_WE_CALL_CONSTRUCTORS

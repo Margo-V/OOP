@@ -27,17 +27,17 @@ public:
 		return str;
 	}
 	//				Constructors
-	explicit String(unsigned int size = 80)
+	explicit String(unsigned int size = 80):size(size), str(new char[size]{})
 	{
-		this->size = size;
-		this->str = new char[size] {};
+		//this->size = size;
+		//this->str = new char[size] {};
 		cout << "Size_DefConstructor:\t" << this << endl;
 	}
 
-	String(const char str[])
+	String(const char str[]):size(strlen(str)+1), str(new char[size]{})
 	{
-		this->size = strlen(str) + 1;
-		this->str = new char[size] {};
+		//this->size = strlen(str) + 1;
+		//this->str = new char[size] {};
 		for (int i = 0; str[i]; i++)
 		{
 			this->str[i] = str[i];
@@ -45,11 +45,11 @@ public:
 		cout << "Constructor:\t" << this << endl;
 	}
 
-	String(const String& other)
+	String(const String& other) :size(other.size), str(new char[size] {})
 	{
-		this->size = other.size;
-		//this->str = other.str; - Shallow copy(поверхностное) //Ќельз€ так делать с указател€ми!
-		this->str = new char[size] {};
+		//this->size = other.size;
+		////this->str = other.str; - Shallow copy(поверхностное) //Ќельз€ так делать с указател€ми!
+		//this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
 		{
 			this->str[i] = other.str[i];	//ѕобитовое(побайтовое) копирование
@@ -57,7 +57,7 @@ public:
 		}
 		cout << "CopyConstructor:" << this << endl;
 	}
-	String( String&& other)
+	String( String&& other):size(other.size), str(other.str)
 	{
 		//MoveConstructor должен работать так, как не должен работать CopyConstructor
 		//то есть, CopyConstructor должен выполн€ть deep copy, а
@@ -67,8 +67,8 @@ public:
 		//он берет пам€ть временного безым€ного объекта 
 		//и передает еЄ создаваемому объекту!!!
 		//ѕри этом временный объект должен потер€ть доступ к своему значению
-		this->size = other.size;
-		this->str = other.str;
+		//this->size = other.size;
+		//this->str = other.str;
 		other.str = nullptr;
 		cout << "MoveConstructor:" << this << endl;
 	}
@@ -106,7 +106,8 @@ public:
 		cout << "MoveAssignement:" << this << endl;
 		return *this;
 	}
-	String& operator+=(const String& other)
+	String& operator+=(const String& other)//:size(other.size) - список-
+										//инициализации можно использовать только в конструкторах
 	{
 		return *this = *this + other;
 	}
@@ -157,7 +158,7 @@ std::ostream& operator<<(std::ostream& os, const String& obj)
 
 //#define CONSTRUCTORSCHECK
 //#define INPUT_CHECK
-//#define OPERATOR_PLUS_CHECK
+#define OPERATOR_PLUS_CHECK
 //#define HOW_CAN_WE_CALL_CONSTRUCTORS
 
 void main()
@@ -196,6 +197,9 @@ void main()
 
 	str1 += str2;
 	cout << str1 << endl;
+
+	String str3 = str1;
+	cout << str3 << endl;
 #endif // OPERATOR_PLUS_CHECK
 
 #ifdef HOW_CAN_WE_CALL_CONSTRUCTORS

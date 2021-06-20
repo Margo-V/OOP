@@ -106,8 +106,8 @@ public:
 		cout << "MoveAssignement:" << this << endl;
 		return *this;
 	}
-	String& operator+=(const String& other)//:size(other.size) - список-
-										//инициализации можно использовать только в конструкторах
+	String& operator+=(const String& other)//:size(other.size) 
+											//- список-инициализации можно использовать только в конструкторах
 	{
 		return *this = *this + other;
 	}

@@ -63,7 +63,7 @@ char* String::get_str()
 	return str;
 }
 //				Constructors
-explicit String::String(unsigned int size = 80) :size(size), str(new char[size] {})
+String::String(unsigned int size) :size(size), str(new char[size] {})
 {
 	cout << "Size_DefConstructor:\t" << this << endl;
 }

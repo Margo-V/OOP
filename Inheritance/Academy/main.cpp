@@ -58,6 +58,7 @@ ostream& operator<<(ostream& os, const Human& obj)
 	return os;
 }
 
+
 class Student :public Human
 {
 	string specialty;

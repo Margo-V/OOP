@@ -1,11 +1,14 @@
 #include<iostream>
+#include "String.h"
 using std::cin;
 using std::cout;
 using std::endl;
 
 #define tab "\t"
 #define delimeter "\n-------------------------------------\n"
+//#define TO_SAVE_CODE_OF_CLASS
 
+#ifdef TO_SAVE_CODE_OF_CLASS
 class String;
 String operator+(const String& left, const String& right);
 
@@ -57,7 +60,7 @@ public:
 		}
 		cout << "CopyConstructor:" << this << endl;
 	}
-	String( String&& other)
+	String(String&& other)
 	{
 		//MoveConstructor должен работать так, как не должен работать CopyConstructor
 		//то есть, CopyConstructor должен выполнять deep copy, а
@@ -110,7 +113,7 @@ public:
 	{
 		return *this = *this + other;
 	}
-	const char& operator[](unsigned int i)const 
+	const char& operator[](unsigned int i)const
 	{
 		return str[i];
 	}
@@ -155,9 +158,11 @@ std::ostream& operator<<(std::ostream& os, const String& obj)
 	return is >> obj.get_str();
 }*/
 
+#endif // TO_SAVE_CODE_OF_CLASS
+
 //#define CONSTRUCTORSCHECK
 //#define INPUT_CHECK
-//#define OPERATOR_PLUS_CHECK
+#define OPERATOR_PLUS_CHECK
 //#define HOW_CAN_WE_CALL_CONSTRUCTORS
 
 void main()

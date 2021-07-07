@@ -242,7 +242,7 @@ namespace Geometry
 			//color -(обычно задается rgb(100,200, 150)
 
 			//Для заливки круга:
-			HBRUSH hBrush = CreateSolidBrush(black);
+			HBRUSH hBrush = CreateSolidBrush(color);
 				
 			//3) Выбираем на чем, и чем будем рисовать
 			SelectObject(hdc, hPen);
@@ -283,7 +283,99 @@ namespace Geometry
 
 	class Triangle :public Shape
 	{
+	public:
+		Triangle(Color color):Shape(color) {}
+		~Triangle() {}
+	};
 
+	class EquilateralTriangle :public Triangle
+	{
+		UINT start_x;
+		UINT start_y;
+		double side;
+	public:
+		double get_side()const
+		{
+			return side;
+		}
+		double get_height()const
+		{
+			return side * pow(3, .5) / 2;
+		}
+		void set_side(double side)
+		{
+			if (side <= 0)side = 1;
+			this->side = side;
+		}
+		void set_start_x(UINT x)
+		{
+			if (x >= 1000)x = 1000;
+			start_x = x;
+		}
+		void set_start_y(UINT y)
+		{
+			if (y >= 700)y = 700;
+			start_y = y;
+		}
+		EquilateralTriangle(Color color, double side, UINT start_x =0, UINT start_y=0) :Triangle(color)//Shape(Color)
+		{
+			set_side(side);
+			set_start_x(start_x);
+			set_start_y(start_y);
+			
+		}
+		~EquilateralTriangle() {}
+
+		double get_area()const
+		{
+			return side * side * pow(3, 0.5) / 4;
+		}
+
+		double get_perimeter()const
+		{
+			return side * 3;
+		}
+
+		void draw()const
+		{
+			HWND hwnd = GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+
+			HPEN hPen = CreatePen(PS_SOLID, 5, color);
+			HBRUSH hBrush = CreateSolidBrush(color);
+
+			SelectObject(hdc, hBrush);
+			SelectObject(hdc, hPen);
+
+
+			POINT points[] =
+			{
+				{start_x, start_y + side},
+				{start_x + side, start_y + side},
+				{start_x + side / 2, start_y + side - get_height()}
+			};
+
+			Polygon(hdc, points, sizeof(points) / sizeof(POINT));
+
+			DeleteObject(hPen);
+			DeleteObject(hBrush);
+			ReleaseDC(hwnd, hdc);
+		}
+
+		void info()const
+		{
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetConsoleTextAttribute(hConsole, Color::console_red_text);
+			cout << "\t\t\tРАВНОСТОРОННИЙ ТРЕУГОЛЬНИК:\n\n";
+			SetConsoleTextAttribute(hConsole, Color::default_console_color);
+
+			cout << "Длина стороны:\t" << side << endl;
+			cout << "Высота:\t\t" << get_height() << endl;
+			cout << "Площадь:\t\t" << get_area() << endl;
+			cout << "Периметр:\t\t" << get_perimeter() << endl;
+			cout << endl;
+			draw();
+		}
 	};
 }
 
@@ -297,12 +389,17 @@ void main()
 
 
 	//Shapes
-	Geometry::Square square(Geometry::Color::console_red, 5);
+	Geometry::Square square(Geometry::Color::console_red, 3);
 	square.info();
 
-	Geometry::Rectangle rect(Geometry::Color::console_green, 4, 8);
+	Geometry::Rectangle rect(Geometry::Color::console_green, 2, 4);
 	rect.info();
 
-	Geometry::Circle circle(Geometry::Color::yellow, 50, 70, 70);
+	Geometry::Circle circle(Geometry::Color::yellow, 50, 100, 370);
 	circle.info();
+
+	Geometry::EquilateralTriangle equil_triangle(Geometry::Color::green, 100, 300, 450);
+	equil_triangle.info();
+
+
 }

@@ -22,15 +22,56 @@ public:
 		cout << "EDestructor:\t" << this << endl;
 	}
 	friend class ForwardList;
+	friend class Iterator;
 };
 
 int Element::count = 0;
+
+class Iterator
+{
+	Element* Temp;
+public:
+	Iterator(Element* Temp = nullptr) :Temp(Temp)
+	{
+		cout << "IConstructor:\t" << this << endl;
+	}
+	~Iterator()
+	{
+		cout << "IDestructor:\t" << this << endl;
+	}
+	//				OPERATORS
+	Iterator& operator++()
+	{
+		Temp = Temp->pNext;
+		return *this;
+	}
+	bool operator==(const Iterator& other)const
+	{
+		return this->Temp == other.Temp;
+	}
+	bool operator!=(const Iterator& other)const
+	{
+		return this->Temp != other.Temp;
+	}
+	int& operator*()
+	{
+		return Temp->Data;
+	}
+};
 
 class ForwardList
 {
 	Element* Head;
 	size_t size; //size_tunsigned int
 public:
+	Iterator begin()
+	{
+		return Head;
+	}
+	Iterator end()
+	{
+		return nullptr;
+	}
 	ForwardList()	//Default constructor - создает пустой список.
 	{
 		this->Head = nullptr; //Если голова указывает на 0, то список пуст.
@@ -41,6 +82,14 @@ public:
 	explicit ForwardList(size_t size):ForwardList()
 	{
 		while ( size--)push_front(0);
+	}
+	ForwardList(const std::initializer_list<int>& il) :ForwardList()
+	{
+		cout << typeid(il.begin()).name() << endl;
+		for (int const* it = il.begin(); it != il.end(); it++)
+		{
+			push_back(*it);
+		}
 	}
 	ForwardList(const ForwardList& other) :ForwardList()
 	{
@@ -225,10 +274,8 @@ public:
 
 //#define BASE_CHECK		//Almost Done
 //#define SIZE_CONSTRUCTOR_AND_SUBSCRIPT
-#define COPY_METHODS
-
-
-//#define INIT_LIST_LIKE_ARRAY
+//#define COPY_METHODS
+#define HARDCORE
 
 void main()
 {
@@ -271,14 +318,6 @@ void main()
 #endif // BASE_CHECK
 
 
-#ifdef INIT_LIST_LIKE_ARRAY
-	ForwardList list = { 3, 5, 8, 13, 21 };
-	for (int i : list)
-	{
-		cout << i << tab;
-	}
-	cout << endl;
-#endif // INIT_LIST_LIKE_ARRAY
 
 	//-----------------------------------------
 #ifdef SIZE_CONSTRUCTOR_AND_SUBSCRIPT
@@ -326,6 +365,29 @@ void main()
 
 #endif // COPY_METHODS
 
+#ifdef HARDCORE
+
+	int arr[] = { 1024, 2048, 4096, 8192 };
+	for (int i = 0; i < sizeof(arr) / sizeof(int); i++)
+		cout << arr[i] << tab;
+	cout << endl;
+
+	for (int i : arr)		//Range-based for
+		cout << i << tab;
+	cout << endl;
+
+	ForwardList list = { 3, 5, 8, 13, 21 };
+	list.print();
+	for (Iterator it = list.begin(); it != list.end(); ++it)
+		cout << *it << tab;
+	cout << endl;
+
+	for (int i : list)
+		cout << i << tab;
+	cout << endl;
+
+
+#endif // HARDCORE
 
 
 }

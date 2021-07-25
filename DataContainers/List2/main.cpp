@@ -31,11 +31,46 @@ class List
 		friend class List;
 	}*Head, * Tail;
 	size_t size;
-public:
-	class Iterator {
+
+	class BaseIterator
+	{
+	protected:
 		Element* Temp;
 	public:
-		Iterator(Element* Temp=nullptr):Temp(Temp)
+		BaseIterator(Element* Temp) :Temp(Temp)
+		{
+			cout << "BITConstructor:\t" << this << endl;
+		}
+		~BaseIterator()
+		{
+			cout << "BITDestructor:\t" << this << endl;
+		}
+		//		Operators:
+		bool operator==(const BaseIterator& other)const
+		{
+			return this->Temp == other.Temp;
+		}
+		bool operator!=(const BaseIterator& other)const
+		{
+			return this->Temp != other.Temp;
+		}
+
+		const int& operator*()const
+		{
+			return Temp->Data;
+		}
+		int& operator*()
+		{
+			return Temp->Data;
+		}
+	};
+
+public:
+	class Iterator :public BaseIterator
+	{
+
+	public:
+		Iterator(Element* Temp=nullptr):BaseIterator(Temp)
 		{
 			cout << "ItConstructor:\t" << this << endl;
 		}
@@ -65,7 +100,7 @@ public:
 			Temp = Temp->pPrev;
 			return old;
 		}
-		bool operator==(const Iterator& other)const
+		/*bool operator==(const Iterator& other)const
 		{
 			return this->Temp == other.Temp;
 		}
@@ -80,18 +115,18 @@ public:
 		int& operator*()
 		{
 			return Temp->Data;
-		}
+		}*/
 	};
-	class ReverseIterator
+
+
+	class ReverseIterator: public BaseIterator
 	{
-		Element* Temp;
+
 	public:
-		ReverseIterator(Element* Temp = nullptr) :Temp(Temp)
-		{
-#ifdef DEBUG
-			cout << "ItConstructor:\t" << this << endl;
-#endif // DEBUG
-		}
+		ReverseIterator(Element* Temp = nullptr):Temp(Temp){}
+		
+		
+
 		~ReverseIterator()
 		{
 #ifdef DEBUG
@@ -122,7 +157,7 @@ public:
 			return old;
 		}
 
-		bool operator==(const ReverseIterator& other)const
+		/*bool operator==(const ReverseIterator& other)const
 		{
 			return this->Temp == other.Temp;
 		}
@@ -137,7 +172,7 @@ public:
 		int& operator*()
 		{
 			return Temp->Data;
-		}
+		}*/
 	};
 	Iterator begin()
 	{
@@ -370,9 +405,9 @@ void main()
 	List list = { 3, 5, 8, 13, 21 };
 	for (int i : list)cout << i << tab;
 	cout << endl;
-	for (List::Iterator it = list.begin(); it != list.end(); it++)
+	/*for (List::Iterator it = list.begin(); it != list.end(); it++)
 		cout << *it << tab;
-	cout << endl;
+	cout << endl;*/
 	/*for (List::Iterator it = list.end(); it != list.begin(); it--)
 		cout << *it << tab;
 	cout << endl;*/
